@@ -1,4 +1,4 @@
-# Deep Cloeset Point
+# Deep Cloeset Scene Flow
 
 ## Prerequisites 
 PyTorch>=1.0: https://pytorch.org
@@ -13,7 +13,7 @@ tqdm
 
 TensorboardX: https://github.com/lanpa/tensorboardX
 
-## Training
+## Training Registration
 
 ### DCP-v1
 
@@ -23,7 +23,7 @@ python main.py --exp_name=dcp_v1 --model=dcp --emb_nn=dgcnn --pointer=identity -
 
 python main.py --exp_name=dcp_v2 --model=dcp --emb_nn=dgcnn --pointer=transformer --head=svd
 
-## Testing
+## Testing Registration
 
 ### DCP-v1
 
@@ -43,16 +43,8 @@ python main.py --exp_name=dcp_v2 --model=dcp --emb_nn=dgcnn --pointer=transforme
 
 where xx/yy is the pretrained model
 
-## Citation
-Please cite this paper if you want to use it in your work,
 
-	@InProceedings{Wang_2019_ICCV,
-	  title={Deep Closest Point: Learning Representations for Point Cloud Registration},
-	  author={Wang, Yue and Solomon, Justin M.},
-	  booktitle = {The IEEE International Conference on Computer Vision (ICCV)},
-	  month = {October},
-	  year={2019}
-	}
-
-## License
-MIT License
+## Testing Scene Flow
+```bash
+./run_flow_training.sh
+```
