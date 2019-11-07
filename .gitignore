@@ -1,2 +1,4 @@
 *.h5
 *.t7
+view_data.py
+*.zip

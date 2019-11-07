@@ -2,6 +2,7 @@ from __future__ import print_function
 import os
 import gc
 import argparse
+from util import open3d_operations
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
@@ -30,6 +31,23 @@ def test_one_epoch(args, net, test_loader):
         identity = torch.eye(3).cuda().unsqueeze(0).repeat(batch_size, 1, 1)
         loss = F.mse_loss(gt_flow_pred, gt_flow)
         total_loss += loss.item() * batch_size
+    
+    if args.display_scene_flow and args.eval:
+        o3d_ops = open3d_operations()
+        np_flow = gt_flow_pred.detach().cpu().numpy()
+        np_flow = np.squeeze(np_flow, axis=(0,))
+
+        src = src.detach().cpu().numpy()
+        src = np.squeeze(src, axis=(0,))
+
+        target = target.detach().cpu().numpy()
+        target = np.squeeze(target, axis=(0,))
+
+        flow_pcd = o3d_ops.make_pcd(np_flow)
+        src_pcd = o3d_ops.make_pcd(src)
+        target_pcd = o3d_ops.make_pcd(target)
+
+        o3d_ops.view([flow_pcd, src_pcd, target_pcd])
 
 
 
