@@ -10,5 +10,4 @@ prepare_data.py
 *.t7
 *.backup
 *.json
-*.txt
 __pycache__
