@@ -8,3 +8,6 @@ prepare_data.py
 *.kshitijpath-MS-7B22
 *.log
 *.t7
+*.backup
+*.json
+*.txt
