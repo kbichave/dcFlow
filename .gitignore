@@ -11,3 +11,4 @@ prepare_data.py
 *.backup
 *.json
 *.txt
+__pycache__
