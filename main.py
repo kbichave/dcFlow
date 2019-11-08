@@ -8,9 +8,6 @@ import gc
 import argparse
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torch.optim.lr_scheduler import MultiStepLR
 from data import ModelNet40, Kitti2015Reg, SceneFlow
 from model import DCP, DCFlow
 import numpy as np
@@ -109,7 +106,9 @@ def main():
     parser.add_argument('--display_scene_flow', action='store_true', default=False,
                         help='view the scene flow at testing')
     parser.add_argument('--onlytrain', action='store_true', default=False,
-                        help='view the scene flow at testing')                    
+                        help='Only performs training when --eval is not passed')    
+    parser.add_argument('--resume_training', action='store_true', default=False,
+                        help='Resume training from model_path or best checkpoint') 
 
 
     args = parser.parse_args()
@@ -169,27 +168,24 @@ def main():
                 print("can't find pretrained model")
                 return
             net.load_state_dict(torch.load(model_path), strict=False)
-        if torch.cuda.device_count() > 1:
-            net = nn.DataParallel(net)
-            print("Let's use", torch.cuda.device_count(), "GPUs!")
-
     elif args.model == 'dcflow':
         net = DCFlow(args).cuda()
-        if args.eval:
+        if args.eval or args.resume_training:
             if args.model_path is '':
                 model_path = 'checkpoints' + '/' + args.exp_name + '/models/model.best.t7'
             else:
                 model_path = args.model_path
                 print(model_path)
             if not os.path.exists(model_path):
-                print("can't find pretrained model")
+                print("can't find pretrained/checkpoint model")
                 return
             net.load_state_dict(torch.load(model_path), strict=False)
-        if torch.cuda.device_count() > 1:
-            net = nn.DataParallel(net)
-            print("Let's use", torch.cuda.device_count(), "GPUs!")
     else:
         raise Exception('Not implemented')
+
+    if torch.cuda.device_count() > 1:
+        net = nn.DataParallel(net)
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
 
     if args.eval:
         if args.model == 'dcp':

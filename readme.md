@@ -1,5 +1,6 @@
 # Deep Cloeset Scene Flow
 Introduction to model coming soon!
+![picture](dependencies/dcFlow.png)
 ## Prerequisites 
 Install the dependencies into your virtual environment. To do so:
 ```bash

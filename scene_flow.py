@@ -135,9 +135,10 @@ def train_flow(args, net, train_loader, test_loader, boardio, textio):
         
         boardio.add_scalar('A->B/train/loss', train_loss, epoch)
 
-        if epoch%50==0:
+        if epoch%20==0:
             send_email(epoch, train_loss, test_loss, best_test_loss)
-    
+            
+        if epoch%50==0:
             if torch.cuda.device_count() > 1:
                 torch.save(net.module.state_dict(), 'checkpoints/%s/models/model.%d.t7' % (args.exp_name, epoch))
             else:
