@@ -9,7 +9,7 @@ import torch.optim as optim
 from torch.optim.lr_scheduler import MultiStepLR
 import numpy as np
 from tqdm import tqdm
-
+from send_email import send_email
 
 
 def test_one_epoch(args, net, test_loader):
@@ -101,42 +101,45 @@ def train_flow(args, net, train_loader, test_loader, boardio, textio):
         opt = optim.Adam(net.parameters(), lr=args.lr, weight_decay=1e-4)
     scheduler = MultiStepLR(opt, milestones=[75, 150, 200], gamma=0.1)
 
-
-    best_test_loss = np.inf
+    if args.onlytrain:
+        best_test_loss = None
+        test_loss = None
+    else:
+        best_test_loss = np.inf
+    
 
     for epoch in range(args.epochs):
         scheduler.step()
         train_loss = train_one_epoch(args, net, train_loader, opt)
         
-        test_loss = test_one_epoch(args, net, test_loader)
+        if not args.onlytrain:
+            test_loss = test_one_epoch(args, net, test_loader)
 
-
-        if best_test_loss >= test_loss:
-            best_test_loss = test_loss
-            if torch.cuda.device_count() > 1:
-                torch.save(net.module.state_dict(), 'checkpoints/%s/models/model.best.t7' % args.exp_name)
-            else:
-                torch.save(net.state_dict(), 'checkpoints/%s/models/model.best.t7' % args.exp_name)
+            if best_test_loss >= test_loss:
+                best_test_loss = test_loss
+                if torch.cuda.device_count() > 1:
+                    torch.save(net.module.state_dict(), 'checkpoints/%s/models/model.best.t7' % args.exp_name)
+                else:
+                    torch.save(net.state_dict(), 'checkpoints/%s/models/model.best.t7' % args.exp_name)
 
         textio.cprint('==TRAIN==')
         textio.cprint('EPOCH:: %d, Loss: %f'% (epoch, train_loss))
 
+        if not args.onlytrain:
+            textio.cprint('==TEST==')
+            textio.cprint('EPOCH:: %d, Loss: %f'% (epoch, test_loss))
 
-        textio.cprint('==TEST==')
-        textio.cprint('EPOCH:: %d, Loss: %f'% (epoch, test_loss))
-    
-
-        textio.cprint('==BEST TEST==')
-        textio.cprint('EPOCH:: %d, Loss: %f'% (epoch, best_test_loss))
+            textio.cprint('==BEST TEST==')
+            textio.cprint('EPOCH:: %d, Loss: %f'% (epoch, best_test_loss))
+            boardio.add_scalar('A->B/test/loss', test_loss, epoch)
         
         boardio.add_scalar('A->B/train/loss', train_loss, epoch)
 
-
-        ############TEST
-        boardio.add_scalar('A->B/test/loss', test_loss, epoch)
-
-        if torch.cuda.device_count() > 1:
-            torch.save(net.module.state_dict(), 'checkpoints/%s/models/model.%d.t7' % (args.exp_name, epoch))
-        else:
-            torch.save(net.state_dict(), 'checkpoints/%s/models/model.%d.t7' % (args.exp_name, epoch))
-        gc.collect()
+        if epoch%50==0:
+            send_email(epoch, train_loss, test_loss, best_test_loss)
+    
+            if torch.cuda.device_count() > 1:
+                torch.save(net.module.state_dict(), 'checkpoints/%s/models/model.%d.t7' % (args.exp_name, epoch))
+            else:
+                torch.save(net.state_dict(), 'checkpoints/%s/models/model.%d.t7' % (args.exp_name, epoch))
+            gc.collect()

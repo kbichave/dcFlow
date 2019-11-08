@@ -108,6 +108,8 @@ def main():
                         help='Num of nearest neighbors to use')
     parser.add_argument('--display_scene_flow', action='store_true', default=False,
                         help='view the scene flow at testing')
+    parser.add_argument('--onlytrain', action='store_true', default=False,
+                        help='view the scene flow at testing')                    
 
 
     args = parser.parse_args()
@@ -145,10 +147,13 @@ def main():
             SceneFlow(dataset_name=args.dataset, num_points=args.num_points, partition='train', gaussian_noise=args.gaussian_noise,
                        unseen=args.unseen, factor=args.factor),
             batch_size=args.batch_size, shuffle=True, drop_last=True)
-        test_loader = DataLoader(
-            SceneFlow(dataset_name=args.dataset, num_points=args.num_points, partition='test', gaussian_noise=args.gaussian_noise,
-                       unseen=args.unseen, factor=args.factor),
-            batch_size=args.test_batch_size, shuffle=False, drop_last=False) 
+        if args.onlytrain:
+            test_loader = None
+        else:
+            test_loader = DataLoader(
+                SceneFlow(dataset_name=args.dataset, num_points=args.num_points, partition='test', gaussian_noise=args.gaussian_noise,
+                        unseen=args.unseen, factor=args.factor),
+                batch_size=args.test_batch_size, shuffle=False, drop_last=False) 
     else:
         raise Exception("not implemented")
 

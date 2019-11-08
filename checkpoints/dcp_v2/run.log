@@ -1,1 +1,72 @@
-Namespace(batch_size=1, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=64, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=False, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=64, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=False, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=64, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=32, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=16, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=8, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=4, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=7, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=6, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=5, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=4, cycle=False, dataset='flyingthings3dflow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=8, cycle=False, dataset='kitti2015flow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=4, cycle=False, dataset='kitti2015flow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+Namespace(batch_size=4, cycle=False, dataset='kitti2015flow', display_scene_flow=False, dropout=0.0, emb_dims=512, emb_nn='dgcnn', epochs=1000, eval=False, exp_name='dcp_v2', factor=4, ff_dims=1024, gaussian_noise=False, head='pointnet', k=20, lr=0.001, model='dcflow', model_path='', momentum=0.9, n_blocks=1, n_heads=4, no_cuda=False, num_points=1024, onlytrain=True, pointer='transformer', seed=1234, test_batch_size=1, unseen=False, use_sgd=False)
+==TRAIN==
+EPOCH:: 0, Loss: 0.478536
+==TRAIN==
+EPOCH:: 1, Loss: 0.297772
+==TRAIN==
+EPOCH:: 2, Loss: 0.261203
+==TRAIN==
+EPOCH:: 3, Loss: 0.250895
+==TRAIN==
+EPOCH:: 4, Loss: 0.236812
+==TRAIN==
+EPOCH:: 5, Loss: 0.228644
+==TRAIN==
+EPOCH:: 6, Loss: 0.231844
+==TRAIN==
+EPOCH:: 7, Loss: 0.222368
+==TRAIN==
+EPOCH:: 8, Loss: 0.218551
+==TRAIN==
+EPOCH:: 9, Loss: 0.216537
+==TRAIN==
+EPOCH:: 10, Loss: 0.213626
+==TRAIN==
+EPOCH:: 11, Loss: 0.211558
+==TRAIN==
+EPOCH:: 12, Loss: 0.212320
+==TRAIN==
+EPOCH:: 13, Loss: 0.211551
+==TRAIN==
+EPOCH:: 14, Loss: 0.209418
+==TRAIN==
+EPOCH:: 15, Loss: 0.207308
+==TRAIN==
+EPOCH:: 16, Loss: 0.206464
+==TRAIN==
+EPOCH:: 17, Loss: 0.206788
+==TRAIN==
+EPOCH:: 18, Loss: 0.204386
+==TRAIN==
+EPOCH:: 19, Loss: 0.204055
+==TRAIN==
+EPOCH:: 20, Loss: 0.204047
+==TRAIN==
+EPOCH:: 21, Loss: 0.204142
+==TRAIN==
+EPOCH:: 22, Loss: 0.200126
+==TRAIN==
+EPOCH:: 23, Loss: 0.203968
+==TRAIN==
+EPOCH:: 24, Loss: 0.201297
+==TRAIN==
+EPOCH:: 25, Loss: 0.200348
+==TRAIN==
+EPOCH:: 26, Loss: 0.196543
+==TRAIN==
+EPOCH:: 27, Loss: 0.194847
+==TRAIN==
+EPOCH:: 28, Loss: 0.194819

@@ -2,3 +2,9 @@
 *.t7
 view_data.py
 *.zip
+send_email.py
+prepare_data.py
+*.py.backup
+*.kshitijpath-MS-7B22
+*.log
+*.t7
