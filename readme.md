@@ -14,31 +14,31 @@ Make sure you install cudatoolkit. The code is highly dependent on CUDA!
 ## Training Registration
 
 ### DCP-v1
-
+```bash
 python main.py --exp_name=dcp_v1 --model=dcp --emb_nn=dgcnn --pointer=identity --head=svd
-
+```
 ### DCP-v2
-
+```bash
 python main.py --exp_name=dcp_v2 --model=dcp --emb_nn=dgcnn --pointer=transformer --head=svd
-
+```
 ## Testing Registration
 
 ### DCP-v1
-
+```bash
 python main.py --exp_name=dcp_v1 --model=dcp --emb_nn=dgcnn --pointer=identity --head=svd --eval
-
+```
 or 
-
+```bash
 python main.py --exp_name=dcp_v1 --model=dcp --emb_nn=dgcnn --pointer=identity --head=svd --eval --model_path=xx/yy
-
+```
 ### DCP-v2
-
+```bash
 python main.py --exp_name=dcp_v2 --model=dcp --emb_nn=dgcnn --pointer=transformer --head=svd --eval
-
+```
 or 
-
+```bash
 python main.py --exp_name=dcp_v2 --model=dcp --emb_nn=dgcnn --pointer=transformer --head=svd --eval --model_path=xx/yy
-
+```
 where xx/yy is the pretrained model
 
 
