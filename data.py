@@ -234,9 +234,11 @@ def load_scene_flow_data(dataset_name, partition):
     all_gt = np.concatenate(all_gt, axis=0)
 
     #####
-    # all_pc1 = all_pc1[:100,:,:]
-    # all_pc2 = all_pc2[:100,:,:]
-    # all_gt = all_gt[:100,:,:]
+    len_data = {'train':100, 'test':50}
+    dt_pts = len_data[partition]
+    all_pc1 = all_pc1[:dt_pts,:,:]
+    all_pc2 = all_pc2[:dt_pts,:,:]
+    all_gt = all_gt[:dt_pts,:,:]
     return all_pc1, all_pc2, all_gt
 
 class SceneFlow(Dataset):

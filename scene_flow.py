@@ -13,6 +13,10 @@ from send_email import send_email
 from chamfer_distance import ChamferDistance
 from util import visualize_scene
 
+
+def EPE(input_flow, target_flow):
+    return torch.norm(target_flow-input_flow,p=2,dim=1).mean()
+
 def test_one_epoch(args, net, test_loader):
     net.eval()
 
@@ -30,25 +34,10 @@ def test_one_epoch(args, net, test_loader):
         gt_flow_pred = net(src, target)
         ###########################
         # loss = F.mse_loss(gt_flow_pred, gt_flow)
-        loss =  torch.norm(gt_flow_pred - gt_flow, p=2, dim=1).mean()
+        loss =  EPE(gt_flow_pred, gt_flow)
         total_loss += loss.item() * batch_size
     
     if args.display_scene_flow and args.eval:
-        # o3d_ops = open3d_operations()
-        # np_flow = gt_flow_pred.detach().cpu().numpy()
-        # np_flow = np.squeeze(np_flow, axis=(0,))
-
-        # src = src.detach().cpu().numpy()
-        # src = np.squeeze(src, axis=(0,))
-
-        # target = target.detach().cpu().numpy()
-        # target = np.squeeze(target, axis=(0,))
-
-        # flow_pcd = o3d_ops.make_pcd(np_flow)
-        # src_pcd = o3d_ops.make_pcd(src)
-        # target_pcd = o3d_ops.make_pcd(target)
-
-        # o3d_ops.view([flow_pcd, src_pcd, target_pcd])
         visualize_scene(src.cpu().detach().numpy(), target.cpu().detach().numpy(), \
             gt_flow.cpu().detach().numpy(), gt_flow_pred.cpu().detach().numpy())
 
@@ -79,8 +68,7 @@ def train_one_epoch(args, net, train_loader, opt):
         # loss = F.mse_loss(gt_flow_pred, gt_flow)
         # cd_ops = ChamferDistance()
         # dist1, dist2 = cd_ops(gt_flow_pred.transpose(2,1), gt_flow.transpose(2,1))
-        loss =  torch.norm(gt_flow_pred - gt_flow, p=2, dim=1).mean()
-
+        loss =  EPE(gt_flow_pred, gt_flow)
 
         loss.backward()
         opt.step()
@@ -138,14 +126,16 @@ def train_flow(args, net, train_loader, test_loader, boardio, textio):
 
             textio.cprint('==BEST TEST==')
             textio.cprint('EPOCH:: %d, Loss: %f'% (epoch, best_test_loss))
+
             boardio.add_scalar('A->B/test/loss', test_loss, epoch)
+            boardio.add_scalar('A->B/test/best_loss', best_test_loss, epoch)
         
         boardio.add_scalar('A->B/train/loss', train_loss, epoch)
 
-        if epoch%20==0:
+        if epoch%100==0:
             send_email(epoch, train_loss, test_loss, best_test_loss)
             
-        if epoch%50==0:
+        if epoch%20==0:
             if torch.cuda.device_count() > 1:
                 torch.save(net.module.state_dict(), 'checkpoints/%s/models/model.%d.t7' % (args.exp_name, epoch))
             else:

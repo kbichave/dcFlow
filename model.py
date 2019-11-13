@@ -381,6 +381,7 @@ class DGCNNFlow(nn.Module):
         x = self.conv5(x)
         return x
 
+'''
 class DGCNNDecoder(nn.Module):
     def __init__(self, args, emb_dims=512):
         super(DGCNNDecoder, self).__init__()
@@ -408,25 +409,25 @@ class DGCNNDecoder(nn.Module):
         self.args = args
         self.k = args.k
         
-        self.bn1 = nn.BatchNorm2d(1024)
-        self.bn2 = nn.BatchNorm2d(512)
-        self.bn3 = nn.BatchNorm2d(256)
-        self.bn4 = nn.BatchNorm2d(128)
+        self.bn1 = nn.BatchNorm2d(512)
+        self.bn2 = nn.BatchNorm2d(256)
+        self.bn3 = nn.BatchNorm2d(128)
+        self.bn4 = nn.BatchNorm2d(32)
         self.bn5 = nn.BatchNorm1d(3)
 
-        self.conv1 = nn.Sequential(nn.Conv2d(2048, 1024, kernel_size=1, bias=False),
+        self.conv1 = nn.Sequential(nn.Conv2d(2048, 512, kernel_size=1, bias=False),
                                    self.bn1,
                                    nn.LeakyReLU(negative_slope=0.2))
-        self.conv2 = nn.Sequential(nn.Conv2d(1024, 512, kernel_size=1, bias=False),
+        self.conv2 = nn.Sequential(nn.Conv2d(1024, 256, kernel_size=1, bias=False),
                                    self.bn2,
                                    nn.LeakyReLU(negative_slope=0.2))
-        self.conv3 = nn.Sequential(nn.Conv2d(512, 256, kernel_size=1, bias=False),
+        self.conv3 = nn.Sequential(nn.Conv2d(512, 128, kernel_size=1, bias=False),
                                    self.bn3,
                                    nn.LeakyReLU(negative_slope=0.2))
-        self.conv4 = nn.Sequential(nn.Conv2d(256, 128, kernel_size=1, bias=False),
+        self.conv4 = nn.Sequential(nn.Conv2d(256, 32, kernel_size=1, bias=False),
                                    self.bn4,
                                    nn.LeakyReLU(negative_slope=0.2))
-        self.conv5 = nn.Sequential(nn.Conv1d(128, 3, kernel_size=1, bias=False),
+        self.conv5 = nn.Sequential(nn.Conv1d(928, 3, kernel_size=1, bias=False),
                                    self.bn5,
                                    nn.LeakyReLU(negative_slope=0.2))
 
@@ -436,7 +437,7 @@ class DGCNNDecoder(nn.Module):
         x = get_graph_feature(x, k=self.k)
         x = self.conv1(x)
         x1 = x.max(dim=-1, keepdim=False)[0]
-        print('DGCNN Decoder Net Conv2 Input Size: ', x.size())
+        
         x = get_graph_feature(x1, k=self.k)
         x = self.conv2(x)
         x2 = x.max(dim=-1, keepdim=False)[0]
@@ -444,17 +445,16 @@ class DGCNNDecoder(nn.Module):
         x = get_graph_feature(x2, k=self.k)
         x = self.conv3(x)
         x3 = x.max(dim=-1, keepdim=False)[0]
-
+        
         x = get_graph_feature(x3, k=self.k)
-        print('DGCNN Decoder conv4 Net Input Size: ', x.size())
         x = self.conv4(x)
         x4 = x.max(dim=-1, keepdim=False)[0]
-        print('DGCNN Encoder conv4 Net Output Size: ', x4.size())
-        print('DGCNN Encoder cat: ', x.size())
+        
+        x = torch.cat((x1, x2, x3, x4), dim=1)
         x = self.conv5(x)
-        print('DGCNN Encoder conv5 Net Output Size: ', x.size())
+
         return x
-'''        
+       
 class MLPHead(nn.Module):
     def __init__(self, args):
         super(MLPHead, self).__init__()
