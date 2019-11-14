@@ -23,7 +23,11 @@ def test_one_epoch(args, net, test_loader):
     total_loss = 0
     total_cycle_loss = 0
     num_examples = 0
-
+    if args.eval_full:
+        gt_full_flow = None
+        pred_full_flow = None
+        src_full = None
+        tar_full = None
     for src, target, gt_flow in tqdm(test_loader):
         src = src.cuda()
         target = target.cuda()
@@ -33,11 +37,28 @@ def test_one_epoch(args, net, test_loader):
         num_examples += batch_size
         gt_flow_pred = net(src, target)
         ###########################
-        # loss = F.mse_loss(gt_flow_pred, gt_flow)
-        loss =  EPE(gt_flow_pred, gt_flow)
+        loss = F.mse_loss(gt_flow_pred, gt_flow)
+        # loss =  EPE(gt_flow_pred, gt_flow)
+
         total_loss += loss.item() * batch_size
-    
-    if args.display_scene_flow and args.eval:
+
+
+        if args.eval_full:
+            if gt_full_flow is None:
+                gt_full_flow = gt_flow.cpu().detach().numpy()
+                pred_full_flow = gt_flow_pred.cpu().detach().numpy()
+                src_full = src.cpu().detach().numpy()
+                tar_full = target.cpu().detach().numpy()
+            else:
+                gt_full_flow = np.concatenate([gt_full_flow, gt_flow.cpu().detach().numpy()], axis=2)
+                pred_full_flow = np.concatenate([pred_full_flow, gt_flow_pred.cpu().detach().numpy()], axis=2)
+                src_full = np.concatenate([src_full, src.cpu().detach().numpy()], axis=2)
+                tar_full = np.concatenate([tar_full, target.cpu().detach().numpy()], axis=2)
+
+
+    if args.display_scene_flow and args.eval and args.eval_full:
+        visualize_scene(src_full.squeeze(), tar_full.squeeze(), gt_full_flow.squeeze(), pred_full_flow.squeeze())
+    elif args.display_scene_flow and args.eval:
         visualize_scene(src.cpu().detach().numpy(), target.cpu().detach().numpy(), \
             gt_flow.cpu().detach().numpy(), gt_flow_pred.cpu().detach().numpy())
 
@@ -65,10 +86,10 @@ def train_one_epoch(args, net, train_loader, opt):
         gt_flow_pred = net(src, target)
 
         ###########################
-        # loss = F.mse_loss(gt_flow_pred, gt_flow)
+        loss = F.mse_loss(gt_flow_pred, gt_flow)
         # cd_ops = ChamferDistance()
         # dist1, dist2 = cd_ops(gt_flow_pred.transpose(2,1), gt_flow.transpose(2,1))
-        loss =  EPE(gt_flow_pred, gt_flow)
+        # loss =  EPE(gt_flow_pred, gt_flow)
 
         loss.backward()
         opt.step()

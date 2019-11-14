@@ -381,39 +381,39 @@ class DGCNNFlow(nn.Module):
         x = self.conv5(x)
         return x
 
-'''
+
+# class DGCNNDecoder(nn.Module):
+#     def __init__(self, args, emb_dims=512):
+#         super(DGCNNDecoder, self).__init__()
+#         self.args = args
+#         self.k = args.k
+        
+#         self.bn1 = nn.BatchNorm2d(3)
+
+#         self.conv1 = nn.Sequential(nn.Conv2d(2048, 3, kernel_size=1, bias=False),
+#                                    self.bn1,
+#                                    nn.LeakyReLU(negative_slope=0.2))
+
+
+#     def forward(self, x):
+#         batch_size = x.size(0)
+#         x = get_graph_feature(x, k=self.k)
+#         x = self.conv1(x)
+#         x = x.max(dim=-1, keepdim=False)[0]
+
+#         return x
+
 class DGCNNDecoder(nn.Module):
     def __init__(self, args, emb_dims=512):
         super(DGCNNDecoder, self).__init__()
         self.args = args
         self.k = args.k
-        
-        self.bn1 = nn.BatchNorm2d(3)
-
-        self.conv1 = nn.Sequential(nn.Conv2d(2048, 3, kernel_size=1, bias=False),
-                                   self.bn1,
-                                   nn.LeakyReLU(negative_slope=0.2))
-
-
-    def forward(self, x):
-        batch_size = x.size(0)
-        x = get_graph_feature(x, k=self.k)
-        x = self.conv1(x)
-        x = x.max(dim=-1, keepdim=False)[0]
-
-        return x
-'''
-class DGCNNDecoder(nn.Module):
-    def __init__(self, args, emb_dims=512):
-        super(DGCNNDecoder, self).__init__()
-        self.args = args
-        self.k = args.k
-        
+        self.output_channels = 3
         self.bn1 = nn.BatchNorm2d(512)
         self.bn2 = nn.BatchNorm2d(256)
         self.bn3 = nn.BatchNorm2d(128)
         self.bn4 = nn.BatchNorm2d(32)
-        self.bn5 = nn.BatchNorm1d(3)
+        self.bn5 = nn.BatchNorm1d(256)
 
         self.conv1 = nn.Sequential(nn.Conv2d(2048, 512, kernel_size=1, bias=False),
                                    self.bn1,
@@ -427,9 +427,12 @@ class DGCNNDecoder(nn.Module):
         self.conv4 = nn.Sequential(nn.Conv2d(256, 32, kernel_size=1, bias=False),
                                    self.bn4,
                                    nn.LeakyReLU(negative_slope=0.2))
-        self.conv5 = nn.Sequential(nn.Conv1d(928, 3, kernel_size=1, bias=False),
+        self.conv5 = nn.Sequential(nn.Conv1d(928, 256, kernel_size=1, bias=False),
                                    self.bn5,
                                    nn.LeakyReLU(negative_slope=0.2))
+
+        
+        self.linear1 = nn.Linear(256, self.output_channels)
 
 
     def forward(self, x):
@@ -437,7 +440,7 @@ class DGCNNDecoder(nn.Module):
         x = get_graph_feature(x, k=self.k)
         x = self.conv1(x)
         x1 = x.max(dim=-1, keepdim=False)[0]
-        
+
         x = get_graph_feature(x1, k=self.k)
         x = self.conv2(x)
         x2 = x.max(dim=-1, keepdim=False)[0]
@@ -445,13 +448,19 @@ class DGCNNDecoder(nn.Module):
         x = get_graph_feature(x2, k=self.k)
         x = self.conv3(x)
         x3 = x.max(dim=-1, keepdim=False)[0]
-        
+
         x = get_graph_feature(x3, k=self.k)
         x = self.conv4(x)
         x4 = x.max(dim=-1, keepdim=False)[0]
-        
+
         x = torch.cat((x1, x2, x3, x4), dim=1)
+
         x = self.conv5(x)
+        x = torch.transpose(x,1,2)
+
+        x = self.linear1(x)
+
+        x = torch.transpose(x,1,2)
 
         return x
        
@@ -628,7 +637,7 @@ class DCFlow(nn.Module):
         if args.emb_nn == 'pointnet':
             self.emb_nn = PointNet(emb_dims=self.emb_dims)
         elif args.emb_nn == 'dgcnn':
-            self.emb_nn = DGCNNFlow(args,emb_dims=self.emb_dims)
+            self.emb_nn = DGCNNFlow(args, emb_dims=self.emb_dims)
         else:
             raise Exception('Not implemented')
 

@@ -274,15 +274,15 @@ def visualize_scene(pc1, pc2, sf, output):
 	if True: #len(sys.argv) >= 4 and sys.argv[3] == 'pc1':
 		mlab.points3d(pc1[:, 0], pc1[:, 1], pc1[:, 2], color=(0,0,1), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # blue
 	
-	if len(sys.argv) >= 4 and sys.argv[3] == 'pc2':
-			mlab.points3d(pc2[:, 0], pc2[:, 1], pc2[:, 2], color=(0,1,1), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # cyan
+	if False:
+		mlab.points3d(pc2[:, 0], pc2[:, 1], pc2[:, 2], color=(0,1,1), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # cyan
 
 	mlab.points3d(gt[:, 0], gt[:, 1], gt[:, 2], color=(1,0,0), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # red
 	mlab.points3d(pred[:, 0], pred[:,1], pred[:,2], color=(0,1,0), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # green
 	
 	
 	# DRAW LINE
-	if DRAW_LINE:
+	if True:
 		N = 2
 		x = list()
 		y = list()

@@ -109,6 +109,8 @@ def main():
                         help='Only performs training when --eval is not passed')    
     parser.add_argument('--resume_training', action='store_true', default=False,
                         help='Resume training from model_path or best checkpoint') 
+    parser.add_argument('--eval_full', action='store_true', default=False,
+                        help='Eval on entire pointcloud') 
 
 
     args = parser.parse_args()
@@ -149,8 +151,12 @@ def main():
         if args.onlytrain:
             test_loader = None
         else:
+            if args.eval_full:
+                partition = 'full'
+            else:
+                partition = 'test'
             test_loader = DataLoader(
-                SceneFlow(dataset_name=args.dataset, num_points=args.num_points, partition='test', gaussian_noise=args.gaussian_noise,
+                SceneFlow(dataset_name=args.dataset, num_points=args.num_points, partition=partition, gaussian_noise=args.gaussian_noise,
                         unseen=args.unseen, factor=args.factor),
                 batch_size=args.test_batch_size, shuffle=False, drop_last=False) 
     else:
@@ -183,7 +189,7 @@ def main():
     else:
         raise Exception('Not implemented')
 
-    if torch.cuda.device_count() > 1:
+    if torch.cuda.device_count():
         net = nn.DataParallel(net)
         print("Let's use", torch.cuda.device_count(), "GPUs!")
 
