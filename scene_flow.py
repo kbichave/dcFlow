@@ -2,7 +2,6 @@ from __future__ import print_function
 import os
 import gc
 import argparse
-from util import open3d_operations
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
@@ -28,6 +27,7 @@ def test_one_epoch(args, net, test_loader):
         pred_full_flow = None
         src_full = None
         tar_full = None
+
     for src, target, gt_flow in tqdm(test_loader):
         src = src.cuda()
         target = target.cuda()
@@ -37,8 +37,8 @@ def test_one_epoch(args, net, test_loader):
         num_examples += batch_size
         gt_flow_pred = net(src, target)
         ###########################
-        loss = F.mse_loss(gt_flow_pred, gt_flow)
-        # loss =  EPE(gt_flow_pred, gt_flow)
+        # loss = F.mse_loss(gt_flow_pred, gt_flow)
+        loss =  EPE(gt_flow_pred, gt_flow)
 
         total_loss += loss.item() * batch_size
 
@@ -71,7 +71,6 @@ def train_one_epoch(args, net, train_loader, opt):
     net.train()
 
     total_loss = 0
-    total_cycle_loss = 0
     num_examples = 0
 
 
@@ -86,10 +85,11 @@ def train_one_epoch(args, net, train_loader, opt):
         gt_flow_pred = net(src, target)
 
         ###########################
-        loss = F.mse_loss(gt_flow_pred, gt_flow)
+        # loss = F.mse_loss(gt_flow_pred, gt_flow)
         # cd_ops = ChamferDistance()
         # dist1, dist2 = cd_ops(gt_flow_pred.transpose(2,1), gt_flow.transpose(2,1))
-        # loss =  EPE(gt_flow_pred, gt_flow)
+        # loss = (torch.mean(dist1)) + (torch.mean(dist2))
+        loss =  EPE(gt_flow_pred, gt_flow)
 
         loss.backward()
         opt.step()
@@ -125,9 +125,8 @@ def train_flow(args, net, train_loader, test_loader, boardio, textio):
     
 
     for epoch in range(args.epochs):
-        scheduler.step()
         train_loss = train_one_epoch(args, net, train_loader, opt)
-        
+        scheduler.step()
         if not args.onlytrain:
             test_loss = test_one_epoch(args, net, test_loader)
 

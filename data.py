@@ -33,7 +33,7 @@ def load_data(partition):
     all_data = []
     all_label = []
     for h5_name in glob.glob(os.path.join(DATA_DIR, 'modelnet40_ply_hdf5_2048', 'ply_data_%s*.h5' % partition)):
-        f = h5py.File(h5_name)
+        f = h5py.File(h5_name, 'r+')
         data = f['data'][:].astype('float32')
         label = f['label'][:].astype('int64')
         f.close()
@@ -134,7 +134,7 @@ def load_kitti_reg_data(partition):
     all_data = []
     all_label = []
     for h5_name in glob.glob(os.path.join(DATA_DIR, 'kitti_registration_%s*.h5' % partition)):
-        f = h5py.File(h5_name)
+        f = h5py.File(h5_name, 'r+')
         data = f['data'][:].astype('float32')
         label = f['label'][:].astype('int64')
         f.close()
@@ -221,7 +221,7 @@ def load_scene_flow_data(dataset_name, partition):
     all_pc2 = []
     all_gt = []
     for h5_name in glob.glob(os.path.join(DATA_DIR, dataset_name+'_scene_flow_%s*.h5' % partition)):
-        f = h5py.File(h5_name)
+        f = h5py.File(h5_name, 'r+')
         pc1 = f['pc1'][:].astype('float32')
         pc2 = f['pc2'][:].astype('float32')
         gt = f['gt'][:].astype('float32')

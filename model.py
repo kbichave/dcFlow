@@ -625,7 +625,6 @@ class DCP(nn.Module):
         else:
             rotation_ba = rotation_ab.transpose(2, 1).contiguous()
             translation_ba = -torch.matmul(rotation_ba, translation_ab.unsqueeze(2)).squeeze(2)
-        k = input()
         return rotation_ab, translation_ab, rotation_ba, translation_ba
 
 

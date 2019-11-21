@@ -1,1 +1,0 @@
-flyingthings3d_data/flyingthings3d_scene_flow_train.h5
