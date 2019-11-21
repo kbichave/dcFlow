@@ -18,9 +18,9 @@ Additional requirements for visualization:
 pip install numba
 pip install cffi
 sudo apt-get -y install python-vtk
-sudo pip install mayavi
+pip install mayavi
 sudo apt-get install python3-pyqt5
-sudo pip install PyQt5
+pip install PyQt5
 ```
 ## Training Registration
 

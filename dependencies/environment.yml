@@ -110,3 +110,5 @@ dependencies:
     - werkzeug==0.16.0
     - widgetsnbextension==3.5.1
     - zipp==0.6.0
+prefix: /home/kshitij-path/anaconda3/envs/dcflow
+
