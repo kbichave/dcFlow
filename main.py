@@ -9,7 +9,7 @@ import argparse
 import torch
 import torch.nn as nn
 from data import ModelNet40, Kitti2015Reg, SceneFlow
-from model import DCP, DCFlow
+from model import DCP, DCFlow, UnsupervisedDCFlow
 import numpy as np
 from torch.utils.data import DataLoader
 from tensorboardX import SummaryWriter
@@ -48,7 +48,7 @@ def main():
     parser.add_argument('--exp_name', type=str, default='exp', metavar='N',
                         help='Name of the experiment')
     parser.add_argument('--model', type=str, default='dcp', metavar='N',
-                        choices=['dcp', 'dcflow'],
+                        choices=['dcp', 'dcflow', 'unsupervised_dcflow'],
                         help='Model to use, [dcp, dcflow]')
     parser.add_argument('--emb_nn', type=str, default='pointnet', metavar='N',
                         choices=['pointnet', 'dgcnn'],
@@ -186,6 +186,18 @@ def main():
                 print("can't find pretrained/checkpoint model")
                 return
             net.load_state_dict(torch.load(model_path), strict=False)
+    elif args.model == 'unsupervised_dcflow':
+        net = UnsupervisedDCFlow(args).cuda()
+        if args.eval or args.resume_training:
+            if args.model_path is '':
+                model_path = 'checkpoints' + '/' + args.exp_name + '/models/model.best.t7'
+            else:
+                model_path = args.model_path
+                print(model_path)
+            if not os.path.exists(model_path):
+                print("can't find pretrained/checkpoint model")
+                return
+            net.load_state_dict(torch.load(model_path), strict=False)        
     else:
         raise Exception('Not implemented')
 
@@ -200,6 +212,9 @@ def main():
         elif args.model == 'dcflow':
             from scene_flow import test_flow
             test_flow(args, net, test_loader, boardio, textio)
+        elif args.model == 'unsupervised_dcflow':
+            from unsupervised_scene_flow import test_flow
+            test_flow(args, net, test_loader, boardio, textio)    
     else:
         if args.model == 'dcp':
             from registration import train
@@ -207,6 +222,9 @@ def main():
         elif args.model == 'dcflow':
             from scene_flow import train_flow
             train_flow(args, net, train_loader, test_loader, boardio, textio)
+        elif args.model == 'unsupervised_dcflow':
+            from unsupervised_scene_flow import train_flow
+            train_flow(args, net, train_loader, test_loader, boardio, textio)    
 
 
     print('FINISH')

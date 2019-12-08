@@ -674,3 +674,48 @@ class DCFlow(nn.Module):
 
         scene_flow = self.head(pc_embedding)
         return scene_flow
+
+
+
+class UnsupervisedDCFlow(nn.Module):
+    def __init__(self, args):
+        super(UnsupervisedDCFlow, self).__init__()
+        self.emb_dims = args.emb_dims
+        self.cycle = args.cycle
+        
+        if args.emb_nn == 'pointnet':
+            self.emb_nn = PointNet(emb_dims=self.emb_dims)
+        elif args.emb_nn == 'dgcnn':
+            self.emb_nn = DGCNNFlow(args, emb_dims=self.emb_dims)
+        else:
+            raise Exception('Not implemented')
+
+        if args.pointer == 'identity':
+            self.pointer = Identity()
+        elif args.pointer == 'transformer':
+            self.pointer = Transformer(args=args)
+        else:
+            raise Exception("Not implemented")
+
+        if args.head == 'mlp':
+            self.head = MLPHead(args=args)
+        elif args.head == 'svd':
+            self.head = SVDHead(args=args)
+        else:
+            raise Exception('Not implemented')
+
+    def forward(self, *input):
+        src = input[0]
+        tgt = input[1]
+        src_embedding = self.emb_nn(src)
+        tgt_embedding = self.emb_nn(tgt)
+
+
+        src_embedding_p, tgt_embedding_p = self.pointer(src_embedding, tgt_embedding)
+
+        src_embedding = src_embedding + src_embedding_p
+        tgt_embedding = tgt_embedding + tgt_embedding_p
+
+        rotation_ab, translation_ab = self.head(src_embedding, tgt_embedding, src, tgt)
+
+        return rotation_ab, translation_ab

@@ -25,6 +25,18 @@ def download():
         os.system('mv %s %s' % (zipfile[:-4], DATA_DIR))
         os.system('rm %s' % (zipfile))
 
+def kitti_download():
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    DATA_DIR = os.path.join(BASE_DIR, 'kitti_data')
+    if not os.path.exists(DATA_DIR):
+        os.mkdir(DATA_DIR)
+    if not os.path.exists(os.path.join(DATA_DIR, 'kitti_data.zip')):
+        www = 'https://drive.google.com/file/d/190WbiZSEFzuW_hfxDBZh3wW2TnNcz9AD/view?usp=sharing'
+        zipfile = os.path.basename(www)
+        os.system('wget %s; unzip %s' % (www, zipfile))
+        os.system('mv %s %s' % (zipfile[:-4], DATA_DIR))
+        os.system('rm %s' % (zipfile))        
+
 
 def load_data(partition):
     download()
@@ -214,7 +226,7 @@ class Kitti2015Reg(Dataset):
 
 #pc1, pc2, gt
 def load_scene_flow_data(dataset_name, partition):
-    download()
+    kitti_download()
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     DATA_DIR = os.path.join(BASE_DIR, dataset_name+'_data')
     all_pc1 = []

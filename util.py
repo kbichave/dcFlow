@@ -124,3 +124,38 @@ def visualize_scene(pc1, pc2, sf, output):
 	mlab.orientation_axes()
 
 	mlab.show()
+
+
+
+def visualize_transformed(pc1, pc2, output):
+
+	if pc1.shape[1] != 3:
+		pc1 = pc1.T
+		pc2 = pc2.T
+		output = output.T
+	
+	pred = pc1 + output
+	
+	print('pc1, pc2, pred', pc1.shape, pc2.shape, pred.shape)
+
+
+	fig = mlab.figure(figure=None, bgcolor=(0,0,0), fgcolor=(1,1,1), engine=None, size=(1600, 1000))
+	
+	if False: #len(sys.argv) >= 4 and sys.argv[3] == 'pc1':
+		mlab.points3d(pc1[:, 0], pc1[:, 1], pc1[:, 2], color=(0,0,1), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # blue
+	
+	if False:
+		mlab.points3d(pc2[:, 0], pc2[:, 1], pc2[:, 2], color=(0,1,1), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # cyan
+
+	mlab.points3d(pred[:, 0], pred[:,1], pred[:,2], color=(0,1,0), scale_factor=SCALE_FACTOR, figure=fig, mode=MODE) # green
+	
+	
+	mlab.view(90, # azimuth
+	         150, # elevation
+			 50, # distance
+			 [0, -1.4, 18], # focalpoint
+			 roll=0)
+
+	mlab.orientation_axes()
+
+	mlab.show()
